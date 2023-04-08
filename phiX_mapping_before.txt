@@ -1,0 +1,2 @@
+#name	%unambiguousReads	unambiguousMB	%ambiguousReads	ambiguousMB	unambiguousReads	ambiguousReads
+gi|216019|gb|J02482.1|PX1CG Coliphage phi-X174, complete genome	0.11280	0.04258	0.00000	0.00000	282	0

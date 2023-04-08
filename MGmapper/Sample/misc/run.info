@@ -1,0 +1,4 @@
+Version	PE_2.22
+Command	/home/user/tools/MGmapper/MGmapper_PE.pl -i /home/user/AVboxshare/Sample.R1.trim.fastq.gz -j /home/user/AVboxshare/Sample.R2.trim.fastq.gz -d /home/user/AVboxshare/MGmapper/Sample -F 1 -C 2 
+WorkDir	/home/user/AVboxshare/MGmapper/Sample
+Date	Fri Apr  7 14:19:49 2023

@@ -1,0 +1,29 @@
+Files in 'stat/*.txt are post-processing results made via the program MGmapper_classify.pl
+
+The files positive.* are those passing the MGmapper_classify.pl filtering criteria):
+MGmapper_classify.pl -i ../misc/stat.Bacteria.annot -c strain (input are paired-end reads)
+
+MGmapper_classify.pl -i ../misc/stat.Bacteria.annot -s -c strain (input are single-end reads)
+
+Default parameters for MGmapper_classify.pl are:
+
+-a 0.01 (abundance of at least 0.01%)
+-r 0.005 (readCountUniq/readCount)
+-m 0.01 (maximum mismatch ratio nucleotides/mismatched_nucleotides, where mismatch_nucleotides are number of changes need to make a read match the reference sequence, also known as the edit_distance)
+-n 10 (minimum number of mapped reads)#
+# At strain and species level -r 0.05 should be used
+# At all other levels i.e. genus phylum etc -r 0 should be used i.e. uniq read count ratio is not used
+#
+-g 0 (minimum coverage)
+-c strain (collapse at clade levels = strain
+
+-s (single-end reads, effecting the abundance calculation. if -s is not defined then abundance is divided by 2 due to pair-end reads)
+Possible clades are: superfamily, phylum, class, order, family, genus, species and strain
+Also, the data from different databases can be collapsed via option -d
+
+A special file is 'abundance.databases.txt' which shows read aboundance for all databases
+Percentages are calculated based on reads available after removing those that map to PhiX (notPhiX). notPhiX count is set
+Unmapped reads is calculated only on runs in Bestmode.
+
+All files are combined into two excel workbook named 'Sample.xlsx' and 'Sample.negative.xlsx', where the latter includes 
+hits at strain and species level that did NOT pass the filters when running MGmapper_classify.pl

@@ -1,0 +1,2 @@
+# Database	Name	S_Abundance (%)	R_Abundance (%)	Size (bp)	Seq_count	Nucleotides	Covered_positions	Coverage	Depth	Reads	Reads_uniq	Edit_distance	Description	superfamily	superfamilyTax	phylum	phylumTax	class	classTax	order	orderTax	family	familyTax	genus	genusTax	species	speciesTax
+ResFinder	Unclassified	6.886	0.041	41211	27	27729	15357	0.373	0.673	196	114	351	collapsed at species level	-	-	-	-	-	-	-	-	-	-	-	-	-	-

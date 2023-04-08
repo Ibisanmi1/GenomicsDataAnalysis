@@ -1,0 +1,32 @@
+## Local date and time /home/user - start main program
+# command: 
+# working dir: /home/user/tools/MGmapper/MGmapper_PE.pl -i /home/user/AVboxshare/Sample.R1.trim.fastq.gz -j /home/user/AVboxshare/Sample.R2.trim.fastq.gz -d /home/user/AVboxshare/MGmapper/Sample -F 1 -C 2 
+
+## Local date and time Fri Apr  7 14:19:52 2023 - cutadapt start
+1	/home/user/AVboxshare/Sample.R1.trim.fastq.gz	239874	239827
+2	/home/user/AVboxshare/Sample.R2.trim.fastq.gz	239874	239706
+## Local date and time Fri Apr  7 14:20:52 2023 - start joining files before readsInCommon
+
+Total	Reads read	Reads after trimming
+Total	479748	479533
+
+## Local date and time Fri Apr  7 14:21:07 2023 - start mapping against phiX
+Reads not mapped to db= phiX:	479320
+
+# All mapped reads
+File with unmapped reads in : /home/user/AVboxshare/MGmapper/Sample/misc/unmapped.F.fq
+Number of unmapped reads : 236917
+File with unmapped reads in : /home/user/AVboxshare/MGmapper/Sample/misc/unmapped.R.fq
+Number of unmapped reads : 236917
+Fullmode	notPhiX	100.00	479320
+Fullmode	ResFinder	  0.041	196
+Bestmode	Bacteria	  1.121	5372
+-	Unmapped	 98.855	473834
+Ave insert size: 274.26
+Std insert size: 60.69
+
+## Local date and time Fri Apr  7 14:37:32 2023 - done
+Total runtime in seconds:	1064
+Number of procs:	1
+Input read count:	479748
+Total nucleotides in databases:	98951490

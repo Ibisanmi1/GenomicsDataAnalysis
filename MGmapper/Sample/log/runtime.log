@@ -1,0 +1,41 @@
+# Start main program
+Fri Apr  7 14:19:49 2023
+Commands run in parallel:
+/usr/local/bin/cutadapt --quality-base=33 -f fastq -q 30 -m 30 -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG -b AATGATACGGCGACCACCGAGATCACACTCTTTCCCTACACGACGCTCTTCCGATCT -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA -o /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt /home/user/AVboxshare/Sample.R1.trim.fastq.gz  > /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt.log
+/usr/local/bin/cutadapt --quality-base=33 -f fastq -q 30 -m 30 -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG -b AATGATACGGCGACCACCGAGATCACACTCTTTCCCTACACGACGCTCTTCCGATCT -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA -o /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt /home/user/AVboxshare/Sample.R2.trim.fastq.gz  > /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt.log
+Fri Apr  7 14:20:49 2023
+# /home/user/tools/MGmapper/scripts/readsInCommon_interleaved.pl -f /home/user/AVboxshare/MGmapper/Sample/misc/all.F.fq -r /home/user/AVboxshare/MGmapper/Sample/misc/all.R.fq -I | /usr/bin/bwa mem -t 1 /home/user/tools/MGmapper/db/phiX174/phiX174 -p -| /usr/local/bin/samtools view -f1 -f12 -Sb - > /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam
+Fri Apr  7 14:21:53 2023
+# /usr/bin/bedtools bamtofastq -i /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam -fq /dev/stdout -fq2 /dev/stdout | /usr/bin/bwa mem  -t 1 -M -p /home/user/tools/MGmapper/db/ResFinder/ResFinder - | /usr/local/bin/samtools view -F 256 -Sb -f2 - > /home/user/AVboxshare/MGmapper/Sample/bam/map.ResFinder.1.bam
+Fri Apr  7 14:23:11 2023
+# /usr/bin/bedtools bamtofastq -i /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam -fq /dev/stdout -fq2 /dev/stdout | /usr/bin/bwa mem  -t 1 -M -p /home/user/tools/MGmapper/db/Bacteria/Bacteria - | /usr/local/bin/samtools view -F 256 -Sb -f2 - > /home/user/AVboxshare/MGmapper/Sample/bam/map.Bacteria.1.bam
+Fri Apr  7 14:25:23 2023
+Commands run in parallel:
+/home/user/tools/MGmapper/scripts/filter_bam.pl -i /home/user/AVboxshare/MGmapper/Sample/bam/map.ResFinder.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.ResFinder.1.bam -f 0.8 -a 30
+/home/user/tools/MGmapper/scripts/filter_bam.pl -i /home/user/AVboxshare/MGmapper/Sample/bam/map.Bacteria.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.Bacteria.1.bam -f 0.8 -a 30
+Fri Apr  7 14:25:24 2023
+Command: best_hit
+Fri Apr  7 14:25:24 2023
+Commands run in parallel:
+/usr/local/bin/samtools sort /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam
+/usr/local/bin/samtools sort /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam
+Fri Apr  7 14:25:25 2023
+Commands run in parallel:
+/usr/local/bin/samtools mpileup -Q0 -f /home/user/tools/MGmapper/db/ResFinder/ResFinder /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam > /home/user/AVboxshare/MGmapper/Sample/misc/pileup.ResFinder.1
+/usr/local/bin/samtools mpileup -Q0 -f /home/user/tools/MGmapper/db/Bacteria/Bacteria /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam > /home/user/AVboxshare/MGmapper/Sample/misc/pileup.Bacteria.1
+Fri Apr  7 14:25:28 2023
+Commands run in parallel:
+/home/user/tools/MGmapper/scripts/mpileup2stat.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/pileup.ResFinder.1 -a /home/user/tools/MGmapper/db/ResFinder/ResFinder.ann -b /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam -o /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.raw.1
+/home/user/tools/MGmapper/scripts/mpileup2stat.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/pileup.Bacteria.1 -a /home/user/tools/MGmapper/db/Bacteria/Bacteria.ann -b /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam -o /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.raw.1
+Fri Apr  7 14:25:30 2023
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.ResFinder.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.ResFinder.log -H -N 479320
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c species -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.ResFinder.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt -N 479320
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c species -a 6.88561601640445 -r 0 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.ResFinder.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt -N 479320
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.Bacteria.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.Bacteria.log -H -N 479320
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c species -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.Bacteria.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt -N 479320
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c species -a 0.0102595669462706 -r 0 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.Bacteria.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt -N 479320
+# /usr/bin/python /home/user/tools/MGmapper/scripts/MGcsv2xls.py /home/user/AVboxshare/MGmapper/Sample/sample.xlsx /home/user/AVboxshare/MGmapper/Sample/abundance.databases.txt /home/user/AVboxshare/MGmapper/Sample/misc/insertSizeDistrib.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.Bacteria.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.Bacteria.txt
+# /usr/bin/python /home/user/tools/MGmapper/scripts/MGcsv2xls.py /home/user/AVboxshare/MGmapper/Sample/sample.negative.xlsx  /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.Bacteria.txt
+Fri Apr  7 14:37:05 2023
+End main programe
+Fri Apr  7 14:37:32 2023

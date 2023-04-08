@@ -1,0 +1,26 @@
+# Database	Name	S_Abundance (%)	R_Abundance (%)	Size (bp)	Seq_count	Nucleotides	Covered_positions	Coverage	Depth	Reads	Reads_uniq	Edit_distance	Description	superfamily	superfamilyTax	phylum	phylumTax	class	classTax	order	orderTax	family	familyTax	genus	genusTax	species	speciesTax	strain	strainTax
+ResFinder	aadE_1_KF864551	0.807	0.003	867	1	2076	631	0.728	2.394	14	14	0	Aminoglycoside resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	erm(F)_3_M17808	0.499	0.002	801	1	967	453	0.566	1.207	8	4	3	Macrolide resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(40)_2_FJ158002	0.491	0.003	1221	1	1660	915	0.749	1.360	12	5	2	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(W)_6_FN396364	0.312	0.003	1920	1	1604	1235	0.643	0.835	12	4	13	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(O)_1_M18896	0.260	0.002	1920	1	1450	999	0.520	0.755	10	5	13	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(44)_2_FN594949	0.260	0.002	1923	1	1484	736	0.383	0.772	10	8	15	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	ant(6)-Ib_1_FN594949	0.233	0.001	858	1	598	240	0.280	0.697	4	4	0	Aminoglycoside resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(W)_4_AJ427422	0.208	0.002	1920	1	1157	729	0.380	0.603	8	0	18	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(W)_5_AJ427421	0.208	0.002	1920	1	1193	710	0.370	0.621	8	0	17	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(W)_1_DQ060146	0.208	0.002	1920	1	1178	698	0.364	0.614	8	0	20	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(40)_1_FJ158002	0.164	0.001	1221	1	555	422	0.346	0.455	4	0	12	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(W)_2_AY049983	0.156	0.001	1920	1	884	505	0.263	0.460	6	6	24	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(L)_2_M29725	0.145	0.001	1377	1	600	336	0.244	0.436	4	0	0	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	erm(F)_2_M17124	0.125	0.000	801	1	300	267	0.333	0.375	2	0	2	Macrolide resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	blaACI-1_1_AJ007350	0.117	0.000	855	1	300	267	0.312	0.351	2	2	0	Beta-lactam resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(O)_2_M20925	0.104	0.001	1920	1	598	531	0.277	0.311	4	0	0	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(44)_1_NZ_ABDU01000081	0.104	0.001	1923	1	493	296	0.154	0.256	4	4	4	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(Q)_2_X58717	0.104	0.001	1926	1	590	547	0.284	0.306	4	2	19	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	cfxA4_1_AY769933	0.104	0.000	966	1	300	300	0.311	0.311	2	0	0	Beta-lactam resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(Q)_4_Z21523	0.101	0.001	1974	1	589	589	0.298	0.298	4	0	7	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(Q)_3_U73497	0.099	0.001	2013	1	575	381	0.189	0.286	4	0	2	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(40)_3_AM419751	0.082	0.000	1221	1	297	240	0.197	0.243	2	0	0	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(L)_8_X60828	0.073	0.000	1377	1	270	270	0.196	0.196	2	0	0	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(L)_1_HM235948	0.072	0.000	1383	1	290	219	0.158	0.210	2	2	1	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(O)_3_Y07780	0.052	0.000	1920	1	300	300	0.156	0.156	2	2	0	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

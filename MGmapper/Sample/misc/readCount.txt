@@ -1,0 +1,8 @@
+/home/user/AVboxshare/Sample.R1.trim.fastq.gz	239874
+/home/user/AVboxshare/Sample.R2.trim.fastq.gz	239874
+/home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt	239827
+/home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt	239706
+/home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam	479320
+/home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.bam	196
+/home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.bam	5372
+/home/user/AVboxshare/MGmapper/Sample/bam/unmapped.bam	473834

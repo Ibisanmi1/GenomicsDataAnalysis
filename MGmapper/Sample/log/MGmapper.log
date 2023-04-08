@@ -1,0 +1,338 @@
+# command: /home/user/tools/MGmapper/MGmapper_PE.pl -i /home/user/AVboxshare/Sample.R1.trim.fastq.gz -j /home/user/AVboxshare/Sample.R2.trim.fastq.gz -d /home/user/AVboxshare/MGmapper/Sample -F 1 -C 2 
+
+# Current directory: /home/user
+# -i: file with reads: /home/user/AVboxshare/Sample.R1.trim.fastq.gz
+# -j: file with mate reads: /home/user/AVboxshare/Sample.R2.trim.fastq.gz
+# -F: Full mode: map reads against these databases: ResFinder
+# -C: Best mode: map reads against these databases: Bacteria
+# -c: Number of cores: 1
+# -t: Matches/readLength: 0.8
+# -v: logfile: /home/user/AVboxshare/MGmapper/Sample/log/MGmapper.log
+# -d: Output directory: /home/user/AVboxshare/MGmapper/Sample
+
+ if (1)# Doing: gunzip -c /home/user/AVboxshare/Sample.R1.trim.fastq.gz | wc -l
+# Doing: gunzip -c /home/user/AVboxshare/Sample.R2.trim.fastq.gz | wc -l
+Adapters removed by cutadapt:
+1	AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG
+2	AATGATACGGCGACCACCGAGATCACACTCTTTCCCTACACGACGCTCTTCCGATCT
+3	AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
+4	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA
+
+/usr/local/bin/cutadapt --quality-base=33 -f fastq -q 30 -m 30 -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG -b AATGATACGGCGACCACCGAGATCACACTCTTTCCCTACACGACGCTCTTCCGATCT -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA -o /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt /home/user/AVboxshare/Sample.R1.trim.fastq.gz  > /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt.log
+/usr/local/bin/cutadapt --quality-base=33 -f fastq -q 30 -m 30 -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCACNNNNNNATCTCGTATGCCGTCTTCTGCTTG -b AATGATACGGCGACCACCGAGATCACACTCTTTCCCTACACGACGCTCTTCCGATCT -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA -o /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt /home/user/AVboxshare/Sample.R2.trim.fastq.gz  > /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt.log
+# Doing: wc -l /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt
+# Doing: wc -l /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt
+# Doing: cat /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R1.trim.fastq.gz.cutadapt >> /home/user/AVboxshare/MGmapper/Sample/misc/all.F.fq
+# Doing: cat /home/user/AVboxshare/MGmapper/Sample/cutadapt/Sample.R2.trim.fastq.gz.cutadapt >> /home/user/AVboxshare/MGmapper/Sample/misc/all.R.fq
+Calling cleanData with parameters: /home/user/AVboxshare/MGmapper/Sample/misc/all.F.fq , /home/user/AVboxshare/MGmapper/Sample/misc/all.R.fq , /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam
+# Doing: /home/user/tools/MGmapper/scripts/readsInCommon_interleaved.pl -f /home/user/AVboxshare/MGmapper/Sample/misc/all.F.fq -r /home/user/AVboxshare/MGmapper/Sample/misc/all.R.fq -I | /usr/bin/bwa mem -t 1 /home/user/tools/MGmapper/db/phiX174/phiX174 -p -| /usr/local/bin/samtools view -f1 -f12 -Sb - > /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam
+
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 70778 sequences (10000181 bp)...
+[M::process] 0 single-end sequences; 70778 paired-end sequences
+[M::process] read 71512 sequences (10000278 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70778 reads in 3.665 CPU sec, 3.720 real sec
+[M::process] 0 single-end sequences; 71512 paired-end sequences
+[M::process] read 70298 sequences (10000103 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 71512 reads in 3.835 CPU sec, 5.135 real sec
+[M::process] 0 single-end sequences; 70298 paired-end sequences
+[M::process] read 69922 sequences (10000105 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70298 reads in 3.897 CPU sec, 5.392 real sec
+[M::process] 0 single-end sequences; 69922 paired-end sequences
+[M::process] read 69794 sequences (10000280 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69922 reads in 4.164 CPU sec, 5.694 real sec
+[M::process] 0 single-end sequences; 69794 paired-end sequences
+[M::process] read 69818 sequences (10000097 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69794 reads in 4.130 CPU sec, 5.492 real sec
+[M::process] 0 single-end sequences; 69818 paired-end sequences
+[M::process] read 57198 sequences (8158489 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69818 reads in 3.912 CPU sec, 5.367 real sec
+[M::process] 0 single-end sequences; 57198 paired-end sequences
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 0, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 57198 reads in 3.199 CPU sec, 4.593 real sec
+[main] Version: 0.7.12-r1039
+[main] CMD: /usr/bin/bwa mem -t 1 -p /home/user/tools/MGmapper/db/phiX174/phiX174 -
+[main] Real time: 46.590 sec; CPU: 27.109 sec
+# Doing: /usr/local/bin/samtools flagstat /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam | head -1 | cut -f1 -d' '
+Number of biological relevant reads: 479320
+# Doing: /usr/bin/bedtools bamtofastq -i /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam -fq /dev/stdout -fq2 /dev/stdout | /usr/bin/bwa mem  -t 1 -M -p /home/user/tools/MGmapper/db/ResFinder/ResFinder - | /usr/local/bin/samtools view -F 256 -Sb -f2 - > /home/user/AVboxshare/MGmapper/Sample/bam/map.ResFinder.1.bam
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 70778 sequences (10000181 bp)...
+[M::process] 0 single-end sequences; 70778 paired-end sequences
+[M::process] read 71512 sequences (10000278 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 15, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (218, 241, 283)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (88, 413)
+[M::mem_pestat] mean and std.dev: (232.07, 66.22)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 478)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70778 reads in 7.237 CPU sec, 14.632 real sec
+[M::process] 0 single-end sequences; 71512 paired-end sequences
+[M::process] read 70298 sequences (10000103 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 7, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 71512 reads in 6.465 CPU sec, 9.788 real sec
+[M::process] 0 single-end sequences; 70298 paired-end sequences
+[M::process] read 69922 sequences (10000105 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 9, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70298 reads in 6.924 CPU sec, 11.694 real sec
+[M::process] 0 single-end sequences; 69922 paired-end sequences
+[M::process] read 69794 sequences (10000280 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 3, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69922 reads in 6.292 CPU sec, 8.690 real sec
+[M::process] 0 single-end sequences; 69794 paired-end sequences
+[M::process] read 69818 sequences (10000097 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 7, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69794 reads in 6.596 CPU sec, 9.361 real sec
+[M::process] 0 single-end sequences; 69818 paired-end sequences
+[M::process] read 57198 sequences (8158489 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 13, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (195, 270, 279)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (27, 447)
+[M::mem_pestat] mean and std.dev: (204.38, 97.33)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 531)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69818 reads in 6.002 CPU sec, 7.243 real sec
+[M::process] 0 single-end sequences; 57198 paired-end sequences
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 5, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] skip orientation FR as there are not enough pairs
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 57198 reads in 4.679 CPU sec, 5.791 real sec
+[main] Version: 0.7.12-r1039
+[main] CMD: /usr/bin/bwa mem -t 1 -M -p /home/user/tools/MGmapper/db/ResFinder/ResFinder -
+[main] Real time: 74.701 sec; CPU: 45.806 sec
+# Doing: /usr/bin/bedtools bamtofastq -i /home/user/AVboxshare/MGmapper/Sample/bam/cleaned.nophiX.bam -fq /dev/stdout -fq2 /dev/stdout | /usr/bin/bwa mem  -t 1 -M -p /home/user/tools/MGmapper/db/Bacteria/Bacteria - | /usr/local/bin/samtools view -F 256 -Sb -f2 - > /home/user/AVboxshare/MGmapper/Sample/bam/map.Bacteria.1.bam
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 70778 sequences (10000181 bp)...
+[M::process] 0 single-end sequences; 70778 paired-end sequences
+[M::process] read 71512 sequences (10000278 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 284, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (173, 232, 287)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 515)
+[M::mem_pestat] mean and std.dev: (218.97, 100.04)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 629)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70778 reads in 14.918 CPU sec, 18.620 real sec
+[M::process] 0 single-end sequences; 71512 paired-end sequences
+[M::process] read 70298 sequences (10000103 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 289, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (146, 233, 291)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 581)
+[M::mem_pestat] mean and std.dev: (218.78, 103.85)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 726)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 71512 reads in 15.460 CPU sec, 26.231 real sec
+[M::process] 0 single-end sequences; 70298 paired-end sequences
+[M::process] read 69922 sequences (10000105 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 300, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (177, 237, 284)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 498)
+[M::mem_pestat] mean and std.dev: (216.52, 97.14)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 605)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 70298 reads in 15.300 CPU sec, 22.750 real sec
+[M::process] 0 single-end sequences; 69922 paired-end sequences
+[M::process] read 69794 sequences (10000280 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 297, 3, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (146, 230, 295)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 593)
+[M::mem_pestat] mean and std.dev: (217.99, 99.76)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 742)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69922 reads in 14.472 CPU sec, 16.340 real sec
+[M::process] 0 single-end sequences; 69794 paired-end sequences
+[M::process] read 69818 sequences (10000097 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 338, 2, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (148, 228, 287)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 565)
+[M::mem_pestat] mean and std.dev: (212.35, 102.24)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 704)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69794 reads in 14.157 CPU sec, 15.818 real sec
+[M::process] 0 single-end sequences; 69818 paired-end sequences
+[M::process] read 57198 sequences (8158489 bp)...
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 317, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (155, 229, 275)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 515)
+[M::mem_pestat] mean and std.dev: (210.55, 92.64)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 635)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 69818 reads in 13.838 CPU sec, 15.260 real sec
+[M::process] 0 single-end sequences; 57198 paired-end sequences
+[M::mem_pestat] # candidate unique pairs for (FF, FR, RF, RR): (0, 273, 0, 0)
+[M::mem_pestat] skip orientation FF as there are not enough pairs
+[M::mem_pestat] analyzing insert size distribution for orientation FR...
+[M::mem_pestat] (25, 50, 75) percentile: (140, 227, 275)
+[M::mem_pestat] low and high boundaries for computing mean and std.dev: (1, 545)
+[M::mem_pestat] mean and std.dev: (209.91, 98.50)
+[M::mem_pestat] low and high boundaries for proper pairs: (1, 680)
+[M::mem_pestat] skip orientation RF as there are not enough pairs
+[M::mem_pestat] skip orientation RR as there are not enough pairs
+[M::mem_process_seqs] Processed 57198 reads in 10.820 CPU sec, 11.103 real sec
+[main] Version: 0.7.12-r1039
+[main] CMD: /usr/bin/bwa mem -t 1 -M -p /home/user/tools/MGmapper/db/Bacteria/Bacteria -
+[main] Real time: 132.875 sec; CPU: 100.736 sec
+/home/user/tools/MGmapper/scripts/filter_bam.pl -i /home/user/AVboxshare/MGmapper/Sample/bam/map.ResFinder.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.ResFinder.1.bam -f 0.8 -a 30
+/home/user/tools/MGmapper/scripts/filter_bam.pl -i /home/user/AVboxshare/MGmapper/Sample/bam/map.Bacteria.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.Bacteria.1.bam -f 0.8 -a 30
+Bamfiles in Fullmode, db= ResFinder: 1
+# Doing cp /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.ResFinder.1.bam /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.bam
+Bamfiles in bestmode: 1
+/home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.Bacteria.1.bam
+# Doing cp /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.Bacteria.1.bam /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.bam
+# Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/mapFilter.ResFinder.1.bam
+/usr/local/bin/samtools sort /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam
+/usr/local/bin/samtools sort /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.bam -o /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam
+/usr/local/bin/samtools mpileup -Q0 -f /home/user/tools/MGmapper/db/ResFinder/ResFinder /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam > /home/user/AVboxshare/MGmapper/Sample/misc/pileup.ResFinder.1
+/usr/local/bin/samtools mpileup -Q0 -f /home/user/tools/MGmapper/db/Bacteria/Bacteria /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam > /home/user/AVboxshare/MGmapper/Sample/misc/pileup.Bacteria.1
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+/home/user/tools/MGmapper/scripts/mpileup2stat.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/pileup.ResFinder.1 -a /home/user/tools/MGmapper/db/ResFinder/ResFinder.ann -b /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam -o /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.raw.1
+/home/user/tools/MGmapper/scripts/mpileup2stat.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/pileup.Bacteria.1 -a /home/user/tools/MGmapper/db/Bacteria/Bacteria.ann -b /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam -o /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.raw.1
+# In mergeBam: /usr/local/bin/samtools view -H /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam >> /home/user/AVboxshare/MGmapper/Sample/bam/merge.ResFinder.sam
+# In mergeBam: /usr/local/bin/samtools view /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.sort.bam >> /home/user/AVboxshare/MGmapper/Sample/bam/merge.ResFinder.sam
+# In mergeBam: /usr/local/bin/samtools view /home/user/AVboxshare/MGmapper/Sample/bam/merge.ResFinder.sam -Sb > /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.bam
+# In mergeBam: rm /home/user/AVboxshare/MGmapper/Sample/bam/merge.ResFinder.sam
+# Doing: /usr/local/bin/samtools flagstat /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.bam | head -1 | cut -f1 -d' '
+# Doing: cat /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.raw.1  > /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.raw
+# In mergeBam: /usr/local/bin/samtools view -H /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam >> /home/user/AVboxshare/MGmapper/Sample/bam/merge.Bacteria.sam
+# In mergeBam: /usr/local/bin/samtools view /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.sort.bam >> /home/user/AVboxshare/MGmapper/Sample/bam/merge.Bacteria.sam
+# In mergeBam: /usr/local/bin/samtools view /home/user/AVboxshare/MGmapper/Sample/bam/merge.Bacteria.sam -Sb > /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.bam
+# In mergeBam: rm /home/user/AVboxshare/MGmapper/Sample/bam/merge.Bacteria.sam
+# Doing: /usr/local/bin/samtools flagstat /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.bam | head -1 | cut -f1 -d' '
+# Doing: cat /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.raw.1  > /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.raw
+mapNotPhiXReads = 479320 used as reference to max possible reads that can map to a database
+Adding annotations to all misc/stat.db.raw files
+Using annotaiotion database: /home/user/tools/MGmapper/db/Bacteria/Bacteria.kch
+Average insert size: 274.26
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.ResFinder.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.ResFinder.log -H -N 479320
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c species -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.ResFinder.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt -N 479320
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c species -a 6.88561601640445 -r 0 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.ResFinder.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt -N 479320
+removing empty file: /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.Bacteria.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.Bacteria.log -H -N 479320
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c species -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.Bacteria.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt -N 479320
+Doing: /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c species -a 0.0102595669462706 -r 0 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.species.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.species.Bacteria.log -H -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt -N 479320
+removing empty file: /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt
+# Doing: /usr/local/bin/samtools flagstat /home/user/AVboxshare/MGmapper/Sample/bam/unmapped.bam | head -1 | cut -f1 -d' '
+# doing /usr/bin/bedtools bamtofastq -i /home/user/AVboxshare/MGmapper/Sample/bam/unmapped.bam -fq /home/user/AVboxshare/MGmapper/Sample/misc/unmapped.F.fq -fq2 /home/user/AVboxshare/MGmapper/Sample/misc/unmapped.R.fq
+
+# /usr/bin/python /home/user/tools/MGmapper/scripts/MGcsv2xls.py /home/user/AVboxshare/MGmapper/Sample/sample.xlsx /home/user/AVboxshare/MGmapper/Sample/abundance.databases.txt /home/user/AVboxshare/MGmapper/Sample/misc/insertSizeDistrib.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.Bacteria.txt /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.Bacteria.txt
+
+# /usr/bin/python /home/user/tools/MGmapper/scripts/MGcsv2xls.py /home/user/AVboxshare/MGmapper/Sample/sample.negative.xlsx  /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.ResFinder.txt /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.Bacteria.txt
+writing Excel file /home/user/AVboxshare/MGmapper/Sample/sample.xlsx
+	writing worksheet abundance.databases
+	drawing pie chart abundance.databases
+	writing worksheet insertSizeDistrib
+	drawing scatter chart insertSizeDistrib
+	writing worksheet positive.strain.ResFinder
+	drawing pie chart positive.strain.ResFinder
+	writing worksheet positive.species.ResFinder
+	drawing pie chart positive.species.ResFinder
+	writing worksheet positive.strain.Bacteria
+	drawing pie chart positive.strain.Bacteria
+	writing worksheet positive.species.Bacteria
+	drawing pie chart positive.species.Bacteria
+writing Excel file /home/user/AVboxshare/MGmapper/Sample/sample.negative.xlsx
+	writing worksheet negative.strain.ResFinder
+	drawing pie chart negative.strain.ResFinder
+	writing worksheet negative.strain.Bacteria
+	drawing pie chart negative.strain.Bacteria
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/all.F.fq
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/all.R.fq
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/map.ResFinder.1.bam
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/map.Bacteria.1.bam
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/pileup.ResFinder.1
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/pileup.Bacteria.1
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.ResFinder.1.bam
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.raw
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/mapTo.Bacteria.1.bam
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.raw
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.ResFinder.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.ResFinder.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.ResFinder.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.ResFinder.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/negative.species.ResFinder.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/positive.strain.Bacteria.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/negative.strain.Bacteria.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/positive.species.Bacteria.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/stat/negative.species.Bacteria.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/misc/negative.species.Bacteria.txt
+Doing: rm /home/user/AVboxshare/MGmapper/Sample/bam/unmapped.bam
+Doing: /usr/bin/pigz -p 1 /home/user/AVboxshare/MGmapper/Sample/misc/*.fq /home/user/AVboxshare/MGmapper/Sample/cutadapt/*.cutadapt
+pigz: /home/user/AVboxshare/MGmapper/Sample/cutadapt/*.cutadapt does not exist -- skipping

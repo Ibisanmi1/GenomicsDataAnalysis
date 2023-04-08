@@ -1,0 +1,477 @@
+---
+title: "Metagenomics applied to surveillance of pathogens and antimicrobial resistance"
+author: "Tope A. Ibisanmi adapted from Steven Sarrazin (Steven.Sarrazin@UGent.be) and Roosmarijn Luiken  (r.e.c.luiken@uu.nl)"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+NB: R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+
+
+##Final quiz V: Epidemiological analysis of metagenomics results
+
+
+In this exercise, we are going to do an epidemiological analysis of the metagenomic results from an AMR monitoring project in livestock, using two explanatory variables.
+
+We have sequenced DNA from feces in 99 pig and poultry herds from five different countries. The DNA has been quality-controlled and trimmed and mapped to the ResFinder database.Along with the reads, we provide you additional explanatory data for the samples that were collected - antimicrobial use and farm biosecurity score. 
+
+Here you will explore the pig data and then the poultry data, separately. For each species, you will start by exploring the data, both of antimicrobial use records for the sampled animals, and the biosecurity characteristics of the visited farms. Next, you will run linear regression and meta-analysis of both total AMU and biosecurity against total resistance. Interpret the resulting plots in order to answer the quizz questions. 
+
+First, Let us load some R libraries that we will need for this exercise.
+```{r load_functions}
+###### required libraries [which are already installed in the virtual machine]
+
+library(dplyr)
+library(broom)
+library(metafor)
+
+```
+
+
+
+Next, let us read the data file: a table that describes the farm each of the pooled samples originated from (including AMU and biosecurity), and the total abundance of resistance genes for each farm measured with metagenomics (FPKM)
+
+```{r read_data}
+
+###### SET WORKING DIRECTORY
+setwd("/home/user/AVboxshare")
+
+
+###### IMPORT DATA 
+data_workshop <- read.table("EFFORT_MG_sampledata_final.txt",sep = '\t', header = TRUE, dec = ',')
+data_workshop$AMU = as.numeric(data_workshop$AMU)
+
+
+###### Create separate datasets for pig and poultry
+MGpig <- data_workshop[data_workshop$type=="PigFeces",]
+MGpoultry <- data_workshop[data_workshop$type=="PoultryFeces",]
+
+```
+
+
+
+
+## Explore the pig data ## 
+
+Start by exploring the data and its transformations.
+
+```{r explore_pig_data1}
+
+#############################
+## Exploration of pig data ##
+#############################
+
+# Antimicrobial use (AMU)#
+##########################
+
+# non-transformed data
+summary(MGpig$AMU) # some summary statistics
+hist(MGpig$AMU) # histogram
+boxplot(MGpig$AMU, main="boxplot of pig AMU") # boxplot
+qqnorm(MGpig$AMU, main="qqplot of pig AMU") # qqplot
+boxplot(MGpig$AMU~MGpig$country, main="boxplot of pig AMU per country") # boxplots per country
+
+
+# log10 + 1 transformed data
+MGpig$AMU_log1 <- log10(MGpig$AMU +1)
+summary(MGpig$AMU_log1) # some summary statistics
+hist(MGpig$AMU_log1) # histogram
+boxplot(MGpig$AMU_log1, main="boxplot of pig AMU (log10+1)") # boxplot
+qqnorm(MGpig$AMU_log1, main="qqplot of pig AMU (log10+1)") # qqplot
+boxplot(MGpig$AMU_log1~MGpig$country, main="boxplot of pig AMU per country (log10+1)") # boxplots per country
+```
+
+
+
+#rewrite the code above for poultry to answers question below
+
+
+## Questions - Exploration of the pig AMU data:
+
+1 Do you notice variation between farms in a country?
+
+2 Do you notice variation between countries?
+
+3 The distribution of the AMU data is skewed. To be used as a predictor for AMR in models, the use of very skewed data is not advised.
+
+- Is the distribution of the non-transformed AMU approximately normally distributed?
+
+- Does the log10+1 transformation help approximate the normal distribution?
+
+
+
+```{r explore_pig_data2}
+
+# Biosecurity #
+###############
+
+# Total external biosecurity score
+summary(MGpig$Biosecurity_external) # some summary statistics
+hist(MGpig$Biosecurity_external) # histogram
+boxplot(MGpig$Biosecurity_external, main = "Total external biosecurity score pigs") # boxplot
+qqnorm(MGpig$Biosecurity_external,  main = "Total external biosecurity score pigs") # qqplot
+boxplot(MGpig$Biosecurity_external~MGpig$country,  main = "Total external biosecurity score pigs")  # boxplots per country
+
+# Total internal biosecurity score
+summary(MGpig$Biosecurity_internal) # some summary statistics
+hist(MGpig$Biosecurity_internal) # histogram
+boxplot(MGpig$Biosecurity_internal, main = "Total internal biosecurity score pigs") # boxplot
+qqnorm(MGpig$Biosecurity_internal, main = "Total internal biosecurity score pigs") # qqplot
+boxplot(MGpig$Biosecurity_internal~MGpig$country, main = "Total internal biosecurity score pigs") # boxplots per country
+
+# Relation external and internal biosecurity at country level
+ext.int.pig <- MGpig[,c("country", "farmid", "Biosecurity_external", "Biosecurity_internal")]
+biosec.pig.long <- reshape(data=ext.int.pig, direction="long", idvar=c("country", "farmid"), 
+                           varying=list(names(ext.int.pig)[3:4]), v.names="Score", timevar="Category",
+                           times=c("Ext", "Int"))
+boxplot(Score~Category*country, data=biosec.pig.long, ylab="Score (%)", ylim=c(0,100),
+        col=(c("gold", "red")), main="External versus internal biosecurity within countries")
+rm(ext.int.pig, biosec.pig.long)
+```
+
+
+
+
+
+
+## Questions - Exploration of the pig biosecurity data:
+
+4 Do you notice variation between farms in a country?
+
+5 Do you notice variation between countries?
+
+6 What is the relation between external and internal biosecurity at the country level?
+
+
+
+## Modeling of pig data ##
+
+Now, let us build linear models to explore the relationship between total resistance in pig farms and explanatory variables.
+
+```{r meta_analysis_pig__AMR_AMU}
+
+###### LINEAR MODELING with the sum of the abundance of all resistance genes (total resistance) as outcome and total use of antimicrobials (AMU) as explanatory variable
+
+
+########################################### TOTAL RESISTANCE VS AMU
+
+### linear regression per country for given variables
+fitted_models =  MGpig %>% group_by(country) %>% do(model = lm(log10(total_resistance+1) ~ log10(AMU+1), data = .))
+
+### rearrange the output of the models
+output_fitted_models = fitted_models %>% tidy(model)
+
+### only select the necessary rows from the output of the models  
+data = subset(output_fitted_models, term == 'log10(AMU + 1)') 
+
+
+### name the necessary variables according to the naming schema of metafor package for meta-analysis
+labs = data$country
+yi   = data$estimate
+sei  = data$std.error
+
+###### META-ANALYSIS  
+
+### do the meta-analysis and see the output in a summary  
+res  <- rma(yi=yi, sei=sei,  method="DL", slab = paste(labs, sep = "       -       ")) 
+summary(res)
+weigh <- weights(res, type="diagonal")
+
+##### FOREST PLOT
+
+###
+png(filename="TOTAL_RESISTANCE_VS_AMU_PIG.png", res=300, width=6*300, height=5*300, type="cairo", pointsize = 9)
+
+forest(res, transf=, refline=0, xlab="Estimate", mlab="Summary Estimate", annotate=TRUE, at=c(-1, 0, 1),
+       showweights = TRUE, digits = 2)
+
+mtext("TOTAL RESISTANCE VS AMU PIG" ,side=3, line=2, col = "blue", cex = 1) 
+mtext(paste("Association p-value=",formatC(summary(res)$pval, format = "f", digits = 4)),side=3, line=0) 
+mtext(paste("Heterogeneity p-value=",formatC(summary(res)$QEp, format = "f", digits = 4)),side=3, line=-1.25)
+mtext("Weight     Estimate (95% CI)",side=3, line=-3, adj = 1)
+mtext("Country ",side=3, line=-3, adj = 0) 
+
+dev.off()
+```
+
+## Questions - AMR-AMU relationship in pigs:
+
+
+7 Interpret the forest plot (TOTAL_RESISTANCE_VS_AMU_PIG.png picture saved in the folder Vboxshare). What is the general relationship between total AMR and total AMU?
+
+- Is the relationship positive or negative? What does this mean?
+
+- Do you notice variation between countries?
+
+
+
+```{r meta_analysis_pig__Biosecurity_AMU}
+
+###### LINEAR MODELING with the sum of the abundance of all resistance genes (total resistance) as outcome and external farm biosecurity as explanatory variable
+
+############################# TOTAL RESISTANCE VS EXTERNAL BIOSECURITY
+
+### linear regression per country for given variables
+fitted_models =  MGpig %>% group_by(country) %>% do(model = lm(log10(total_resistance+1) ~ Biosecurity_external, data = .))
+
+### rearrange the output of the models
+output_fitted_models = fitted_models %>% tidy(model)
+
+### only select the necessary rows from the output of the models  
+data = subset(output_fitted_models, term == 'Biosecurity_external') 
+
+### name the necessary variables according to the naming schema of metafor package for meta-analysis
+labs = data$country
+yi   = data$estimate
+sei  = data$std.error
+
+###### META-ANALYSIS  
+
+### do the meta-analysis and see the output in a summary  
+res  <- rma(yi=yi, sei=sei,  method="DL", slab = paste(labs, sep = "       -       ")) 
+summary(res)
+weigh <- weights(res, type="diagonal")
+
+##### FOREST PLOT
+
+###
+png(filename="TOTAL_RESISTANCE_VS_EXTERNAL_BIOSECURITY_PIG.png", res=300, width=6*300, height=5*300, type="cairo", pointsize = 9)
+
+forest(res, transf=, refline=0, xlab="Estimate", mlab="Summary Estimate", annotate=TRUE, at=c(-0.1, 0, 0.1),
+       showweights = TRUE, digits = 2)
+
+mtext("TOTAL RESISTANCE VS EXTERNAL BIOSECURITY PIG" ,side=3, line=2, col = "blue", cex = 1) 
+mtext(paste("Association p-value=",formatC(summary(res)$pval, format = "f", digits = 4)),side=3, line=0) 
+mtext(paste("Heterogeneity p-value=",formatC(summary(res)$QEp, format = "f", digits = 4)),side=3, line=-1.25)
+mtext("Weight     Estimate (95% CI)",side=3, line=-3, adj = 1) 
+mtext("Country ",side=3, line=-3, adj = 0) 
+
+dev.off()
+```
+
+
+## Questions - AMR-biosecurity relationship in pigs:
+
+
+8 Interpret the forest plot (TOTAL_RESISTANCE_VS_EXTERNAL_BIOSECURITY_PIG.png picture saved in the folder Vboxshare). What is the general relationship between total AMR and external farm biosecurity? 
+
+- Is the relationship positive or negative? What does this mean?
+
+- Do you notice variation between countries?
+
+9 Can you conclude from the epidemiological analysis, on probable associations that may justify the observed differences in AMR between farms?
+
+
+
+## Explore the poultry data ## 
+
+Start by exploring the data and its transformations.
+
+```{r explore_poultry_data1}
+#################################
+## Exploration of poultry data ##
+#################################
+
+
+# AMU #
+#######
+
+# Non-transformed data
+summary(MGpoultry$AMU) # some summary statistics
+hist(MGpoultry$AMU) # histogram
+boxplot(MGpoultry$AMU, main="poultry AMU") # boxplot
+qqnorm(MGpoultry$AMU, main="poultry AMU") # qqplot
+boxplot(MGpoultry$AMU~MGpoultry$country, main="poultry AMU") # boxplots per country
+
+# log10 +1 transformed data
+MGpoultry$AMU_log1 <- log10(MGpoultry$AMU +1)
+summary(MGpoultry$AMU_log1) # some summary statistics
+hist(MGpoultry$AMU_log1) # histogram
+boxplot(MGpoultry$AMU_log1, main="poultry AMU (log10+1)") # boxplot
+qqnorm(MGpoultry$AMU_log1, main="poultry AMU (log10+1)") # qqplot
+boxplot(MGpoultry$AMU_log1~MGpoultry$country, main="poultry AMU (log10+1)") # boxplots per country
+
+```
+
+
+## Questions - Exploration of the poultry AMU data:
+
+1 Do you notice variation between farms?
+
+2 Do you notice variation between countries?
+
+3 The distribution of the AMU data is skewed. To be used as a predictor for AMR in models, the use of very skewed data is not advised.
+
+- Is the distribution of the non-transformed AMU approximately normally distributed?
+
+- Does the log10+1 transformation help approximate the normal distribution?
+
+
+
+```{r explore_poultry_data2}
+
+# Biosecurity #
+###############
+
+# Total external biosecurity score
+summary(MGpoultry$Biosecurity_external) # some summary statistics
+hist(MGpoultry$Biosecurity_external) # histogram
+boxplot(MGpoultry$Biosecurity_external, main="Total external biosecurity poultry") # boxplot
+qqnorm(MGpoultry$Biosecurity_external, main="Total external biosecurity poultry") # qqplot
+boxplot(MGpoultry$Biosecurity_external~MGpoultry$country, 
+        main="Total external biosecurity poultry") # boxplots per country
+
+# Total internal biosecurity score
+summary(MGpoultry$Biosecurity_internal) # some summary statistics
+hist(MGpoultry$Biosecurity_internal) # histogram
+boxplot(MGpoultry$Biosecurity_internal, main="Total internal biosecurity poultry") # boxplot
+qqnorm(MGpoultry$Biosecurity_internal, main="Total internal biosecurity poultry") # qqplot
+boxplot(MGpoultry$Biosecurity_internal~MGpoultry$country, 
+        main="Total internal biosecurity poultry") # boxplots per country
+
+# Relation external and internal biosecurity at country level
+ext.int.poultry <- MGpoultry[,c("country", "farmid", "Biosecurity_external", "Biosecurity_internal")]
+biosec.poultry.long <- reshape(data=ext.int.poultry, direction="long", idvar=c("country", "farmid"), 
+                               varying=list(names(ext.int.poultry)[3:4]), v.names="Score", timevar="Category",
+                               times=c("Ext", "Int"))
+boxplot(Score~Category*country, data=biosec.poultry.long, ylab="Score (%)", ylim=c(0,100),
+        col=(c("gold", "red")), main="External versus internal biosecurity within countries")
+rm(ext.int.poultry, biosec.poultry.long)
+
+```
+
+
+
+## Questions - Exploration of the poultry biosecurity data:
+
+4 Do you notice variation between farms?
+
+5 Do you notice variation between countries?
+
+6 What is the relation between external and internal biosecurity at the country level?
+
+
+
+## Modeling of poultry data ##
+
+Now, let us build linear models to explore the relationship between total resistance in poultry farms and explanatory variables.
+
+```{r meta_analysis_poultry__AMR_AMU}
+
+###### LINEAR MODELING with the sum of the abundance of all resistance genes (total resistance) as outcome and total use of antimicrobials (AMU) as explanatory variable
+
+
+
+
+########################################### TOTAL RESISTANCE VS AMU
+
+### linear regression per country for given variables
+fitted_models =  MGpoultry %>% group_by(country) %>% do(model = lm(log10(total_resistance+1) ~ log10(AMU+1), data = .))
+
+### rearrange the output of the models
+output_fitted_models = fitted_models %>% tidy(model)
+
+### only select the necessary rows from the output of the models  
+data = subset(output_fitted_models, term == 'log10(AMU + 1)') 
+
+### name the necessary variables according to the naming schema of metafor package for meta-analysis
+labs = data$country
+yi   = data$estimate
+sei  = data$std.error
+
+###### META-ANALYSIS  
+
+### do the meta-analysis and see the output in a summary  
+res  <- rma(yi=yi, sei=sei,  method="DL", slab = paste(labs, sep = "       -       ")) 
+summary(res)
+weigh <- weights(res, type="diagonal")
+
+##### FOREST PLOT
+
+###
+png(filename="TOTAL_RESISTANCE_VS_AMU_POULTRY.png", res=300, width=6*300, height=5*300, type="cairo", pointsize = 9)
+
+forest(res, transf=, refline=0, xlab="Estimate", mlab="Summary Estimate", annotate=TRUE, at=c(-1, 0, 1),
+       showweights = TRUE, digits = 2)
+
+mtext("TOTAL RESISTANCE VS AMU POULTRY" ,side=3, line=2, col = "blue", cex = 1) 
+mtext(paste("Association p-value=",formatC(summary(res)$pval, format = "f", digits = 4)),side=3, line=0) 
+mtext(paste("Heterogeneity p-value=",formatC(summary(res)$QEp, format = "f", digits = 4)),side=3, line=-1.25)
+mtext("Weight     Estimate (95% CI)",side=3, line=-3, adj = 1)
+mtext("Country ",side=3, line=-3, adj = 0) 
+
+dev.off()
+
+
+```
+
+## Questions - AMR-AMU relationship in poultry:
+
+
+7 Interpret the forest plot (TOTAL_RESISTANCE_VS_AMU_POULTRY.png picture saved in the folder Vboxshare). What is the general relationship between total AMR and total AMU? 
+
+- Is the relationship positive or negative? What does this mean?
+
+- Do you notice variation between countries?
+
+
+```{r meta_analysis_poultry__Biosecurity_AMU}
+
+###### LINEAR MODELING with the sum of the abundance of all resistance genes (total resistance) as outcome and external farm biosecurity as explanatory variable
+
+
+############################# TOTAL RESISTANCE VS EXTERNAL BIOSECURITY
+
+### linear regression per country for given variables
+fitted_models =  MGpoultry %>% group_by(country) %>% do(model = lm(log10(total_resistance+1) ~ Biosecurity_external, data = .))
+
+### rearrange the output of the models
+output_fitted_models = fitted_models %>% tidy(model)
+
+### only select the necessary rows from the output of the models  
+data = subset(output_fitted_models, term == 'Biosecurity_external') 
+
+### name the necessary variables according to the naming schema of metafor package for meta-analysis
+labs = data$country
+yi   = data$estimate
+sei  = data$std.error
+
+###### META-ANALYSIS  
+
+### do the meta-analysis and see the output in a summary  
+res  <- rma(yi=yi, sei=sei,  method="DL", slab = paste(labs, sep = "       -       ")) 
+summary(res)
+weigh <- weights(res, type="diagonal")
+
+##### FOREST PLOT
+
+###
+png(filename="TOTAL_RESISTANCE_VS_EXTERNAL_BIOSECURITY_POULTRY.png", res=300, width=6*300, height=5*300, type="cairo", pointsize = 9)
+
+forest(res, transf=, refline=0, xlab="Estimate", mlab="Summary Estimate", annotate=TRUE, at=c(-0.1, 0, 0.1),
+       showweights = TRUE, digits = 2)
+
+mtext("TOTAL RESISTANCE VS EXTERNAL BIOSECURITY POULTRY" ,side=3, line=2, col = "blue", cex = 1) 
+mtext(paste("Association p-value=",formatC(summary(res)$pval, format = "f", digits = 4)),side=3, line=0) 
+mtext(paste("Heterogeneity p-value=",formatC(summary(res)$QEp, format = "f", digits = 4)),side=3, line=-1.25)
+mtext("Weight     Estimate (95% CI)",side=3, line=-3, adj = 1)
+mtext("Country ",side=3, line=-3, adj = 0) 
+
+dev.off()
+
+```
+
+## Questions AMR-biosecurity relationship in poultry:
+
+8 Interpret the forest plot (TOTAL_RESISTANCE_VS_EXTERNAL_BIOSECURITY_POULTRY.png picture saved in the folder Vboxshare). What is the general relationship between total AMR and external farm biosecurity in broilers? What is the general relationship between total AMR and external farm biosecurity? 
+
+- Is the relationship positive or negative? What does this mean?
+
+- Do you notice variation between countries?
+
+9 Can you conclude from the epidemiological analysis on probable associations that may justify the observed differences in AMR between farms?

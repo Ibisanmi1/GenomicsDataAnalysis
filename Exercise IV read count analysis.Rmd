@@ -1,0 +1,206 @@
+---
+title: Workshop -  Metagenomics applied to surveillance of pathogens and antimicrobial
+  resistance
+author: "Tope A. Ibisanmi adapted from Patrick Munk (pmun@food.dtu.dk)"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+NB: R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+
+
+
+## Final quiz IV: Interpretation of metagenomics results 
+
+
+In this exercise, we are going to look at the metagenomic results from an AMR monitoring project in livestock
+
+We have previously sequenced DNA from feces in 99 pig and poultry herds from five different countries. The DNA has been quality- and adapter-trimmed and mapped to the ResFinder database.
+
+Let us read four files so we can better explore our results:
+
+1) A table that describes the farm each of the samples originate from
+
+2) The count table with reads matching ResFinder genes in the samples
+
+3) A gene-level relative abundance table for AMR (FPKM)
+
+4) A class-level relative abundance table for AMR (FPKM)
+
+
+```{r read_data}
+# Tell R where to look for files
+setwd("/home/user/AVboxshare/")
+# Table with sample descriptions
+sampledata = read.delim(file="EFFORT_MG_sampledata_final.txt", dec=",")
+# Gene-level count data
+RF.gene.counts = read.delim(file="EFFORT_MG_ResFinder_count.txt", check.names = F, row.names = 1, dec=",")
+# Gene-level relative abundance data (FPKM)
+RF.gene.fpkm = read.delim(file="EFFORT_MG_ResFinder_FPKM.txt", check.names = F, row.names = 1, dec=",")
+# class-level relative abundance data (FPKM)
+RF.class.fpkm = read.delim(file="EFFORT_MG_ResFinder_class_FPKM.txt", check.names = F, row.names = 1, dec=",")
+```
+
+The relative abundance tables (FPKM) are based on the raw read counts, but have been adjusted to gene length and the amount of bacterial DNA in the sample. FPKM in this context means fragments per kilobase gene per million (bacterial) fragments.
+
+Instead of re-inventing the wheel, let us load some R libraries and functions suited for making sense of our data.
+
+```{r load_functions}
+library(vegan)                  # Community ecology package
+library(pheatmap)               # Pretty heatmaps
+library(ggplot2)                # Excellent plotting tools
+library(reshape2)               # Reshaping data
+
+source("WorkshopRfunctions.R")  # Some custom functions for this exercise
+```
+
+
+Let us get an overview of the sample farm descriptions to know what we are dealing with.
+If a dataset becomes large, this is a nice ensure everything is in order.
+```{r summary}
+# Use summary function on a dataframe to get usefull statistics about each column
+summary(sampledata)
+```
+
+We can see we have an almost even split of pig and poultry fecal samples: 49 and 50 respectively. Also, the 99 samples are split evenly between the five countries, which have been anonymised.
+
+Let us find out how many different AMR genes were observed within each farm. 
+We can just count how many values in each column (sample) are above 0.
+```{r richness}
+# Count number of genes per sample with non-zero abundance
+genesPerFarm = colSums(RF.gene.counts > 0)
+# Let us see how rich the samples were in terms of AMR genes
+summary(genesPerFarm)
+```
+
+
+## Questions - richness:
+
+Question 1 - what is the range of different AMR genes observed in the samples?
+
+Question 2 - do you think these values are meaningful to compare?
+
+
+With both many samples and genes, it can be hard to see any patterns in the data. 
+
+Many different clustering techniques exist that can be used to make sense of multivariate data.
+
+Here, we will make a principal coordinates analysis (PCoA) to find patterns in our resistome dataset.
+
+For this kind of analysis, the R community ecology package 'vegan' is useful. We will use it to
+
+1) Transform our "raw" data
+
+2) Calculate how dissimilar each sample is
+
+3) Run PCoA on the dissimilarities
+
+```{r betadiversity}
+
+# Vegan expect samples as rows and features as columns, so let us transpose our data using t()
+RF.gene.fpkm.t = t(RF.gene.fpkm)
+
+# Data normalization
+# Use "Hellinger" transformation to give samples more even weight and give genes' more even weight (square root)
+RF.gene.fpkm.hell = vegan::decostand(RF.gene.fpkm.t, method = "hellinger")
+
+# Sample dissimilarities
+# Calculate how dissimilar any two samples are, using the Bray-Curtis dissimilarity index
+RF.gene.fpkm.dist = vegan::vegdist(RF.gene.fpkm.hell, method = "bray")
+
+# Find the first two coordinates using the cmdscale function
+RF.gene.fpkm.pcoa = cmdscale(RF.gene.fpkm.dist, k = 2, add = T)
+
+# The points are stored in the resulting object. Plot them
+plot(RF.gene.fpkm.pcoa$points)
+
+# Let us make a more informative plot with annotation using a custom function
+# We give it the dist matrix, the sample data and the name of the column for coloring
+dist2pcoaplotAnno(RF.gene.fpkm.dist, sampledata, "type")
+ggsave("RF.gene.pcoa.png")
+
+```
+
+
+## Questions - beta-diversity:
+
+Question 3 - Does host animal appear important to the structure of the resistome?
+
+Question 4 - How much of the resistome variance is explainable when using only two dimensions?
+
+Question 5 - Can you modify your last command to color based on country? If so, do you see a country effect?
+
+
+Let us go into some more details with the pig data
+
+```{r pigData}
+# Subset data to only pig samples
+sampledata.pig = sampledata[sampledata$type == "PigFeces",]
+RF.gene.fpkm.pig = RF.gene.fpkm[,colnames(RF.gene.fpkm) %in% sampledata.pig$Sample]
+RF.gene.fpkm.pig = RF.gene.fpkm.pig[rowSums(RF.gene.fpkm.pig)>0,]
+
+# Normalize data
+RF.gene.fpkm.pig.hel = decostand(t(RF.gene.fpkm.pig), method = "hellinger")   
+
+# Calculate dissimilarity matrix
+RF.gene.fpkm.pig.dist = vegdist(RF.gene.fpkm.pig.hel, method = "bray")
+
+# Make a PCoA plot
+dist2pcoaplotAnno(RF.gene.fpkm.pig.dist, sampledata.pig, "country")
+ggsave("RF.gene.pig.pcoa.png")
+
+```
+
+## Questions - pig resistome:
+
+Question 6 - Does it look like there is a country effect on the pig resistome?
+
+For some variables, the effects can be pretty obvious. Vegan actually includes functions for statistical testing on dist matrices.
+
+adonis2 is such a function
+
+Let us test the significance of the country effect
+
+```{r adonis2Pig}
+# Calculate effect of country on resistome clustering in pigs
+ad.pig.country = adonis2(RF.gene.fpkm.pig.dist ~ country, sampledata.pig)
+# Check the results
+ad.pig.country
+```
+
+
+## Questions - country effect:
+
+Question 7 - Is the country effect significant at alpha 0.05?
+
+
+For this type of data, heatmaps are also really useful tools.
+
+```{r heatmap}
+# Make a heatmap of the gene-level relative abundance data
+pheatmap(RF.gene.fpkm)
+# That is not a very nice figure. Let us cheat and use a custom function that
+# 1 = only shows most abundant genes
+# 2 = Normalizes the data for us
+# 3 = Adds an annotation bar for samples
+# 4 = Clusters samples based on Bray Curtis dissimilarity
+geneHeatmap(RF.gene.fpkm.pig, sampledata.pig, "country")
+```
+
+
+## Questions - heatmaps:
+
+Question 8 - By changing the last code line, now do the same analysis for the pig data (variable: "RF.gene.fpkm.pig"; table "sampledata.pig") and color-annotate by "country". 
+
+In which country is the country effect (clustering) less pronounced ?
+
+
+
+
+Now you have an idea about how you can explore your metagenomic read count data using R! There are of course many more functions in vegan alone, and many more useful packages.

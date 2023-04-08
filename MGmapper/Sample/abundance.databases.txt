@@ -1,0 +1,4 @@
+Fullmode	notPhiX	100.00	479320
+Fullmode	ResFinder	  0.041	196
+Bestmode	Bacteria	  1.121	5372
+-	Unmapped	 98.855	473834

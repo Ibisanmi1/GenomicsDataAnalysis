@@ -1,0 +1,3 @@
+# Database	Name	S_Abundance (%)	R_Abundance (%)	Size (bp)	Seq_count	Nucleotides	Covered_positions	Coverage	Depth	Reads	Reads_uniq	Edit_distance	Description	superfamily	superfamilyTax	phylum	phylumTax	class	classTax	order	orderTax	family	familyTax	genus	genusTax	species	speciesTax	strain	strainTax
+ResFinder	mef(A)_3_AF227521	1.067	0.005	1218	1	3813	1045	0.858	3.131	26	25	156	Macrolide resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+ResFinder	tet(Q)_1_L33696	0.727	0.006	1926	1	3608	1496	0.777	1.873	28	27	23	Tetracycline resistance	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

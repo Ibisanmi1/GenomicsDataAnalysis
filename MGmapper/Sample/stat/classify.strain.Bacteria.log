@@ -1,0 +1,10 @@
+## Local date and time Fri Apr  7 14:25:32 2023 - Start program
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.Bacteria.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.Bacteria.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.Bacteria.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.Bacteria.log -H -N 479320 
+# working dir: /home/user
+
+# databases: Bacteria
+# Number of hits processed:	43
+# Number of hits accepted:	4
+# Total_reads= 5334	rejected_reads= 2322	 % rejected= 43.532
+# Maximum accepted abundance value=	0.014056393224672
+# Minimum accepted abundance value=	0.0102595670462706

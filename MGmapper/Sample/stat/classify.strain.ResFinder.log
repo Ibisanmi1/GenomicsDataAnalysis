@@ -1,0 +1,10 @@
+## Local date and time Fri Apr  7 14:25:31 2023 - Start program
+# /home/user/tools/MGmapper/MGmapper_classify.pl -i /home/user/AVboxshare/MGmapper/Sample/misc/stat.ResFinder.annot -c strain -a 0.01 -r 0.005 -m 0.15 -n 20 -g 0 -o /home/user/AVboxshare/MGmapper/Sample/stat/positive.strain.ResFinder.txt -f /home/user/AVboxshare/MGmapper/Sample/stat/negative.strain.ResFinder.txt -v -l /home/user/AVboxshare/MGmapper/Sample/stat/classify.strain.ResFinder.log -H -N 479320 
+# working dir: /home/user
+
+# databases: ResFinder
+# Number of hits processed:	27
+# Number of hits accepted:	2
+# Total_reads= 196	rejected_reads= 142	 % rejected= 72.449
+# Maximum accepted abundance value=	1.06732348111658
+# Minimum accepted abundance value=	0.726895119418484
